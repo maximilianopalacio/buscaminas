@@ -68,20 +68,12 @@ function ganoElJuego()
   return true;
 }
 
-function ponerMinasTablero()
-{
-  for (let contador = 0; contador < 10; contador++)
-{
-  columnaAleatoria = Math.floor(random(0, 100));
-  filaAleatoria = Math.floor(random(0, 100));
-  if(tieneMinaCasillero(columnaAleatoria, filaAleatoria))
-  {
-      //esto se ejecuta si la columna 4, fila 5 tiene una mina
-  }
-  else
-  {
-      //esto se ejecuta si la columna 4, fila 5 NO tiene una mina
-  }
+function ponerMinasTablero(){
+  for (let contador = 0; contador < CANTIDAD_MINAS; contador++){
+    columnaAleatoria = Math.floor(random(0, COLUMNAS));
+    filaAleatoria = Math.floor(random(0, FILAS));
+    ponerMinaCasillero(columnaAleatoria, filaAleatoria);
+    console.log(columnaAleatoria, filaAleatoria);
 }
   // Modificar/completar
 }
