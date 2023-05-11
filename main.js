@@ -1,7 +1,7 @@
 //Constantes del juego
 const COLUMNAS = 10;
 const FILAS = 10;
-const CANTIDAD_MINAS = 10;
+const CANTIDAD_MINAS = 20;
 
 //Variables con colores para los casilleros (NO se pudieron declarar como constantes ya que  la fn color sólo está definida para el setup y el draw)
 var COLOR_CASILLERO_CON_MINA;
@@ -17,8 +17,7 @@ var hizoClick = false;
 var casillerosSinDescubrir;
 
 
-function setup()
-{
+function setup(){
   createCanvas(500, 500);   
   laMagiaDeLosProfes();
 
@@ -34,54 +33,45 @@ function setup()
 
 
 function draw() {
-  if (hizoClick == true)
-  {
-    if (mouseButton == LEFT)
-    {
+  if (hizoClick == true){
+    if (mouseButton == LEFT){
+      if(descubrirCasillero(columnaPresionada, filaPresionada)){
+        pintarCasillero(columnaPresionada, filaPresionada, COLOR_CASILLERO_SIN_MINA);
+      }
       if (tieneMinaCasillero(columnaPresionada, filaPresionada)){
         pintarCasillero(columnaPresionada, filaPresionada, COLOR_CASILLERO_CON_MINA);
         mostrarMinas();
         perder();
       }
-      if(descubrirCasillero(columnaPresionada, filaPresionada))
-      {
-        pintarCasillero(columnaPresionada, filaPresionada, COLOR_CASILLERO_SIN_MINA);
-      }
-      if (casillerosSinDescubrir == CANTIDAD_MINAS){
+      if (casillerosSinDescubrir == CANTIDAD_MINAS && tieneMinaCasillero == false){
         ganoElJuego();
       }
     }
-    else
-    {
+    else{
       pintarCasillero(columnaPresionada, filaPresionada, COLOR_CASILLERO_MARCADO);
     }
     hizoClick = false;
   }
-  
 }
-function ganoElJuego()
-{
+
+function ganoElJuego(){
   ganar();
   return true;
 }
 
-function ponerMinasTablero()
-{
+function ponerMinasTablero(){
   for (var contador = 0; contador < CANTIDAD_MINAS; contador++){
     numeroColumna =  floor(random(0, COLUMNAS));
     numeroFila = floor(random(0,  FILAS));
     console.log(numeroColumna+", "+numeroFila)
-    if(!tieneMinaCasillero(numeroColumna, numeroFila))
-    {
+    if(!tieneMinaCasillero(numeroColumna, numeroFila)){
       ponerMinaCasillero(numeroColumna, numeroFila);
     }
-    else
-    {
+    else{
       contador--;
     }
   }
 } 
-
 
 function mostrarMinas()
 {
@@ -89,31 +79,24 @@ function mostrarMinas()
     for (var contF = 0; contF < FILAS; contF++){
       if (tieneMinaCasillero(contC, contF)){
         pintarCasillero(contC, contF, COLOR_CASILLERO_CON_MINA);
-        
       }
     }
   }
-
 }
 
-
-function contarMinasAlrededor()
+function contarMinasAlrededor(columnaPresionada, filaPresionada)
 {
-  if(tieneMinaCasillero(FILAS-1,COLUMNAS))
-  {
-    contador1++;
+  let cont = 0;
+  for (let y = -1; y <= +1; y++){
+    for (let x = -1; x <= +1; x++){
+      columnaAdy = columnaPresionada + y;
+      filaAdy = filaPresionada + x;
+      if (columnaAdy >= 0 && columnaAdy < COLUMNAS && filaAdy >= 0 && filaAdy < FILAS) {
+        if (tieneMinaCasillero(columnaAdy, filaAdy)) {
+          cont ++;
+        }
+      }    
+    } 
   }
-  if(tieneMinaCasillero(FILAS,COLUMNAS-1))
-  {
-    contador1++;
-  }
-  if(tieneMinaCasillero(FILAS+1,COLUMNAS))
-  {
-    contador1++;
-  }
-  if(tieneMinaCasillero(FILAS,COLUMNAS+1))
-  {
-    contador1++;
-  }
-  return 9;
+  return cont;   
 }
